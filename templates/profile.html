@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DermaScan AI · Skin profile</title>
+  <style>
+    :root{--ink:#17251f;--muted:#68766f;--green:#176b52;--line:#dce7e0;--paper:#f5f8f5;--white:#fff}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+    .wrap{max-width:900px;margin:0 auto;padding:28px 18px 56px}.brand{font-weight:800;letter-spacing:.02em;color:var(--green);font-size:1.1rem}
+    .hero{padding:32px 0 20px}.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;font-size:.78rem;letter-spacing:.12em}
+    h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.06;margin:.5rem 0 1rem;letter-spacing:-.04em}
+    .lead{color:var(--muted);max-width:650px}.panel{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 12px 36px #173c2610}
+    fieldset{border:0;padding:0;margin:0 0 24px}legend{font-weight:750;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
+    .choice{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}.choice:has(input:checked){border-color:var(--green);background:#eaf5ef}
+    input{accent-color:var(--green)}.actions{display:flex;flex-wrap:wrap;gap:12px}.btn{border:0;border-radius:12px;background:var(--green);color:white;padding:13px 18px;font-weight:750;cursor:pointer;font-size:1rem}.btn.secondary{background:#e8f1eb;color:var(--green)}
+    .flash{border-radius:10px;padding:12px 14px;background:#fff0ee;color:#8b2820;margin:12px 0}.note{color:var(--muted);font-size:.9rem;margin-top:18px}
+  </style>
+</head>
+<body><main class="wrap">
+  <div class="brand">DermaScan AI</div>
+  <section class="hero"><div class="eyebrow">Personalized skincare, clearer decisions</div><h1>Know your products.<br>Build a routine that fits.</h1><p class="lead">Set your skin profile to scan an ingredient label or explore a practical product shortlist and budget-friendly routine.</p></section>
+  {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}
+  <form class="panel" action="{{ url_for('profile') }}" method="post">
+    <fieldset><legend>What is your skin type?</legend><div class="choices">
+      {% for item in ["Oily","Dry","Combination","Sensitive","Normal"] %}
+      <label class="choice"><input type="radio" name="skin_type" value="{{ item }}" {% if skin_type == item %}checked{% endif %}>{{ item }}</label>
+      {% endfor %}
+    </div></fieldset>
+    <fieldset><legend>What would you like to focus on?</legend><div class="choices">
+      {% for item in ["Acne","Excess Oil","Hyperpigmentation","Barrier Repair","Anti-Aging"] %}
+      <label class="choice"><input type="checkbox" name="concerns" value="{{ item }}" {% if item in concerns %}checked{% endif %}>{{ item }}</label>
+      {% endfor %}
+    </div></fieldset>
+    <div class="actions"><button class="btn" type="submit" name="destination" value="scan">Scan ingredient label →</button><button class="btn secondary" type="submit" name="destination" value="discover">Discover products →</button></div>
+    <p class="note">Educational support only—not a diagnosis or a substitute for a dermatologist. Product prices and web snippets may be outdated.</p>
+  </form>
+</main></body></html>
